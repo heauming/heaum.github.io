@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" role="img" aria-label="EA logo">
+  
+  <g fill="currentColor">
+    
+    <path d="M 20 12 L 92 12 L 84 28 L 36 28 Z"></path>
+    <path d="M 32 42 L 88 42 L 80 58 L 24 58 Z"></path>
+    <path d="M 28 72 L 100 72 L 92 88 L 20 88 Z"></path>
+    
+    <path d="M 130 12 L 168 12 L 192 88 L 156 88 L 152 72 L 124 72 L 120 88 L 96 88 L 130 12 Z M 134 56 L 148 56 L 142 36 Z"></path>
+  </g>
+</svg>

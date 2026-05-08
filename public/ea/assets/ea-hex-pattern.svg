@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="EA hex pattern tile">
+  
+  <defs>
+    <pattern id="hex" x="0" y="0" width="56" height="48" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1">
+        <polygon points="14,0 42,0 56,24 42,48 14,48 0,24"></polygon>
+        <polygon points="42,24 70,24 84,48 70,72 42,72 28,48"></polygon>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="240" height="240" fill="#eaeaea"></rect>
+  <rect width="240" height="240" fill="url(#hex)"></rect>
+</svg>

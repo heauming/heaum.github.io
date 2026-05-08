@@ -1,0 +1,153 @@
+/* EA Design System — Colors & Type tokens
+ * Source of truth: EA_DESIGN.md
+ * Fonts: Electronic Arts Display + Electronic Arts Text are proprietary (MCKL).
+ * We use Pretendard (locally hosted, all 9 weights) as the unified display + text family.
+ * Pretendard handles both Latin and Hangul beautifully and matches EA's blocky,
+ * geometric voice while keeping Korean copy first-class.
+ */
+
+@font-face { font-family: "Pretendard"; font-weight: 100; font-style: normal; font-display: swap;
+  src: url("fonts/Pretendard-Thin.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 200; font-style: normal; font-display: swap;
+  src: url("fonts/Pretendard-ExtraLight.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 300; font-style: normal; font-display: swap;
+  src: url("fonts/Pretendard-Light.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 400; font-style: normal; font-display: swap;
+  src: url("fonts/Pretendard-Regular.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 500; font-style: normal; font-display: swap;
+  src: url("fonts/Pretendard-Medium.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 600; font-style: normal; font-display: swap;
+  src: url("fonts/Pretendard-SemiBold.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 700; font-style: normal; font-display: swap;
+  src: url("fonts/Pretendard-Bold.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 800; font-style: normal; font-display: swap;
+  src: url("fonts/Pretendard-ExtraBold.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 900; font-style: normal; font-display: swap;
+  src: url("fonts/Pretendard-Black.woff") format("woff"); }
+
+:root {
+  /* ---------- Brand & Accent ---------- */
+  --ea-primary: #FF4545;          /* EA Coral — universal CTA, wordmark */
+  --ea-primary-pressed: #e63a3a;  /* pressed pill */
+  --ea-primary-active: #cc2f2f;   /* deeply pressed */
+  --ea-primary-soft: #f05556;     /* tints / inline link hover */
+  --ea-accent-violet: #6B4FBB;    /* footer medallion, EA Originals */
+  --ea-accent-violet-deep: #4A3690;
+
+  /* ---------- Surface ---------- */
+  --ea-canvas-dark: #000000;
+  --ea-surface-dark-elevated: #0f0f10;
+  --ea-surface-dark-card: #1a1a1a;
+  --ea-canvas-light: #ffffff;
+  --ea-surface-hex: #eaeaea;       /* hex-pattern band base */
+  --ea-surface-soft: #f4f4f4;
+  --ea-surface-card: #fafafa;
+  --ea-hairline-light: #e5e5e5;
+  --ea-hairline-dark: rgba(255, 255, 255, 0.12);
+
+  /* ---------- Text ---------- */
+  --ea-ink: #000000;
+  --ea-ink-deep: #0f0f10;
+  --ea-body-light: rgba(0, 0, 0, 0.7);
+  --ea-mute-light: #666666;
+  --ea-ash-light: #bfbfbf;
+  --ea-on-dark: #ffffff;
+  --ea-body-dark: rgba(255, 255, 255, 0.75);
+  --ea-on-dark-mute: #bfbfbf;
+  --ea-mute-dark: rgba(255, 255, 255, 0.55);
+  --ea-on-coral: #ffffff;
+
+  /* ---------- Semantic ---------- */
+  --ea-success: #3ba55d;
+  --ea-warning: #e84a3f;
+  --ea-link-light: #cc2f2f;
+  --ea-link-dark: #FF4545;
+
+  /* ---------- Spacing (8px base) ---------- */
+  --ea-space-xxs: 4px;
+  --ea-space-xs: 8px;
+  --ea-space-sm: 12px;
+  --ea-space-md: 16px;
+  --ea-space-lg: 24px;
+  --ea-space-xl: 32px;
+  --ea-space-xxl: 48px;
+  --ea-space-section: 96px;
+
+  /* ---------- Radii ---------- */
+  --ea-radius-none: 0;
+  --ea-radius-sm: 4px;       /* cards/tiles — EA signature */
+  --ea-radius-md: 8px;       /* inputs */
+  --ea-radius-lg: 16px;      /* dialogs */
+  --ea-radius-full: 9999px;  /* pills */
+
+  /* ---------- Elevation ---------- */
+  --ea-shadow-active: 0 4px 16px rgba(0, 0, 0, 0.2);
+  --ea-focus-ring: 0 0 0 2px var(--ea-primary);
+
+  /* ---------- Typography stacks ----------
+   * Display = blocky, bold, cinematic.
+   * Text   = compact body cut.
+   * Pretendard handles Hangul fallback.
+   */
+  --ea-font-display: "Pretendard", "EA Display", "Helvetica Neue", Arial, sans-serif;
+  --ea-font-text: "Pretendard", "EA Text", "Helvetica Neue", Arial, sans-serif;
+
+  /* ---------- Type scale (raw tokens) ---------- */
+  --ea-display-xl: 900 56px/1.05 var(--ea-font-display);
+  --ea-display-xl-tracking: -1px;
+  --ea-display-lg: 800 44px/1.1 var(--ea-font-display);
+  --ea-display-lg-tracking: -0.6px;
+  --ea-display-md: 800 32px/1.15 var(--ea-font-display);
+  --ea-display-md-tracking: -0.4px;
+  --ea-heading-xl: 700 24px/1.25 var(--ea-font-display);
+  --ea-heading-xl-tracking: -0.2px;
+  --ea-heading-lg: 600 20px/1.3 var(--ea-font-display);
+  --ea-heading-md: 700 16px/1.25 var(--ea-font-display);
+  --ea-heading-md-tracking: 0.2px;
+  --ea-body-md: 400 16px/1.5 var(--ea-font-text);
+  --ea-body-strong: 600 16px/1.4 var(--ea-font-text);
+  --ea-body-sm: 400 14px/1.5 var(--ea-font-text);
+  --ea-caption-md: 400 13px/1.5 var(--ea-font-text);
+  --ea-caption-sm: 600 11px/1.4 var(--ea-font-text);
+  --ea-caption-sm-tracking: 0.4px;
+  --ea-link-md: 500 16px/1.5 var(--ea-font-text);
+  --ea-button-lg: 700 16px/1.25 var(--ea-font-text);
+  --ea-button-lg-tracking: 0.3px;
+  --ea-button-md: 700 13px/1.25 var(--ea-font-text);
+  --ea-button-md-tracking: 0.4px;
+  --ea-eyebrow: 700 12px/1.4 var(--ea-font-display);
+  --ea-eyebrow-tracking: 1.2px;
+}
+
+/* ---------- Semantic element styles ---------- */
+.ea-display-xl { font: var(--ea-display-xl); letter-spacing: var(--ea-display-xl-tracking); }
+.ea-display-lg { font: var(--ea-display-lg); letter-spacing: var(--ea-display-lg-tracking); }
+.ea-display-md { font: var(--ea-display-md); letter-spacing: var(--ea-display-md-tracking); }
+.ea-heading-xl { font: var(--ea-heading-xl); letter-spacing: var(--ea-heading-xl-tracking); }
+.ea-heading-lg { font: var(--ea-heading-lg); }
+.ea-heading-md { font: var(--ea-heading-md); letter-spacing: var(--ea-heading-md-tracking); }
+.ea-body { font: var(--ea-body-md); color: var(--ea-body-light); }
+.ea-body-strong { font: var(--ea-body-strong); }
+.ea-body-sm { font: var(--ea-body-sm); }
+.ea-caption { font: var(--ea-caption-md); color: var(--ea-mute-light); }
+.ea-eyebrow {
+  font: var(--ea-eyebrow);
+  letter-spacing: var(--ea-eyebrow-tracking);
+  text-transform: uppercase;
+}
+.ea-badge-label {
+  font: var(--ea-caption-sm);
+  letter-spacing: var(--ea-caption-sm-tracking);
+  text-transform: uppercase;
+}
+
+/* ---------- Hex-pattern surface ---------- */
+.ea-surface-hex {
+  background-color: var(--ea-surface-hex);
+  background-image:
+    linear-gradient(60deg, rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(-60deg, rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 28px 48px;
+  background-position: 0 0, 0 0, 14px 24px;
+}

@@ -1,0 +1,99 @@
+/* =============================================================================
+   Apple Web Design System — colors and typography tokens
+   ========================================================================== */
+
+@font-face { font-family: "Pretendard"; font-weight: 100; font-display: swap;
+  src: url("/fonts/Pretendard-Thin.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 200; font-display: swap;
+  src: url("/fonts/Pretendard-ExtraLight.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 300; font-display: swap;
+  src: url("/fonts/Pretendard-Light.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 400; font-display: swap;
+  src: url("/fonts/Pretendard-Regular.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 500; font-display: swap;
+  src: url("/fonts/Pretendard-Medium.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 600; font-display: swap;
+  src: url("/fonts/Pretendard-SemiBold.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 700; font-display: swap;
+  src: url("/fonts/Pretendard-Bold.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 800; font-display: swap;
+  src: url("/fonts/Pretendard-ExtraBold.woff") format("woff"); }
+@font-face { font-family: "Pretendard"; font-weight: 900; font-display: swap;
+  src: url("/fonts/Pretendard-Black.woff") format("woff"); }
+
+:root {
+  --colors-primary:           #0066cc;
+  --colors-primary-focus:     #0071e3;
+  --colors-primary-on-dark:   #2997ff;
+
+  --colors-canvas:            #ffffff;
+  --colors-canvas-parchment:  #f5f5f7;
+  --colors-surface-pearl:     #fafafc;
+  --colors-surface-tile-1:    #272729;
+  --colors-surface-tile-2:    #2a2a2c;
+  --colors-surface-tile-3:    #252527;
+  --colors-surface-black:     #000000;
+
+  --colors-ink:               #1d1d1f;
+  --colors-body:              #1d1d1f;
+  --colors-body-on-dark:      #ffffff;
+  --colors-body-muted:        #cccccc;
+  --colors-ink-muted-80:      #333333;
+  --colors-ink-muted-48:      #7a7a7a;
+
+  --colors-divider-soft:      #f0f0f0;
+  --colors-hairline:          #e0e0e0;
+
+  --radii-none:   0;
+  --radii-xs:     5px;
+  --radii-sm:     8px;
+  --radii-md:    11px;
+  --radii-lg:    18px;
+  --radii-pill:  9999px;
+  --radii-full:  9999px;
+
+  --font-display: "Pretendard", "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-text:    "Pretendard", "SF Pro Text",    system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --bg:              var(--colors-canvas);
+  --bg-parchment:    var(--colors-canvas-parchment);
+  --bg-pearl:        var(--colors-surface-pearl);
+  --bg-dark:         var(--colors-surface-tile-1);
+  --bg-darker:       var(--colors-surface-tile-3);
+  --bg-darker-up:    var(--colors-surface-tile-2);
+  --bg-black:        var(--colors-surface-black);
+
+  --fg:              var(--colors-ink);
+  --fg-muted:        var(--colors-ink-muted-80);
+  --fg-disabled:     var(--colors-ink-muted-48);
+  --fg-on-dark:      var(--colors-body-on-dark);
+  --fg-muted-on-dark: var(--colors-body-muted);
+
+  --link:            var(--colors-primary);
+  --link-on-dark:    var(--colors-primary-on-dark);
+  --focus-ring:      var(--colors-primary-focus);
+
+  --border-hairline: var(--colors-hairline);
+  --border-soft:     var(--colors-divider-soft);
+}
+
+html {
+  font-family: var(--font-text);
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}

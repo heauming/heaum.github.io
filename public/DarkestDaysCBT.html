@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Darkest Days · CBT Survey Analysis</title>
+<link rel="stylesheet" href="ea/colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; background: #000; font-family: var(--ea-font-text); -webkit-font-smoothing: antialiased; }
+
+  /* Bump 12px micro-type up to 14px for Korean readability */
+  :root {
+    --ea-eyebrow: 700 14px/1.4 var(--ea-font-display);
+    --ea-caption-sm: 600 14px/1.4 var(--ea-font-text);
+  }
+
+  /* ---------- Slide base ---------- */
+  deck-stage section {
+    box-sizing: border-box;
+    width: 1920px; height: 1080px;
+    overflow: hidden;
+    color: var(--ea-on-dark);
+    background: var(--ea-canvas-dark);
+    padding: 100px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  section.light { background: var(--ea-canvas-light); color: var(--ea-ink); }
+  section.hex { background-color: var(--ea-surface-hex);
+    background-image:
+      linear-gradient(60deg, rgba(0,0,0,0.05) 1px, transparent 1px),
+      linear-gradient(-60deg, rgba(0,0,0,0.05) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 56px 96px;
+    background-position: 0 0, 0 0, 28px 48px;
+    color: var(--ea-ink);
+  }
+  section.coral { background: var(--ea-primary); color: #fff; }
+
+  /* ---------- Top chrome (eyebrow row) ---------- */
+  .chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 60px;
+  }
+  .light .chrome, .hex .chrome { color: rgba(0,0,0,0.55); }
+  .coral .chrome { color: rgba(255,255,255,0.85); }
+  .chrome .ea-mark {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-weight: 900; color: var(--ea-primary); letter-spacing: -0.5px;
+    font-size: 18px;
+  }
+  .light .chrome .ea-mark, .hex .chrome .ea-mark { color: var(--ea-primary); }
+  .coral .chrome .ea-mark { color: #fff; }
+  .chrome .meta { display: flex; gap: 40px; }
+
+  /* ---------- Type ---------- */
+  h1.display-xxl {
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    font-size: 132px;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin: 0;
+  }
+  h1.display-xl {
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    font-size: 96px;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin: 0;
+  }
+  h2.title {
+    font-family: var(--ea-font-display);
+    font-weight: 800;
+    font-size: 64px;
+    line-height: 1.05;
+    letter-spacing: -1.4px;
+    margin: 0;
+  }
+  h3.heading {
+    font-family: var(--ea-font-display);
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 1.15;
+    letter-spacing: -0.4px;
+    margin: 0;
+  }
+  .eyebrow {
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    text-transform: uppercase;
+  }
+  .body {
+    font-family: var(--ea-font-text);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.78);
+  }
+  .light .body, .hex .body { color: rgba(0,0,0,0.72); }
+  .coral .body { color: rgba(255,255,255,0.92); }
+  .small {
+    font-family: var(--ea-font-text);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.65);
+  }
+  .light .small, .hex .small { color: rgba(0,0,0,0.6); }
+  .accent { color: var(--ea-primary); }
+  .coral .accent { color: #fff; }
+
+  /* ---------- Cover ---------- */
+  .cover-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 80px;
+    align-items: stretch;
+  }
+  .cover-left { display: flex; flex-direction: column; justify-content: space-between; }
+  .cover-tag { font-size: 26px; font-weight: 600; color: rgba(255,255,255,0.7); max-width: 720px; line-height: 1.5; }
+  .cover-right {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, #4a1010 0%, transparent 60%),
+      radial-gradient(circle at 70% 80%, #1a0606 0%, transparent 50%),
+      linear-gradient(180deg, #0a0a0a 0%, #1a0a0a 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 48px;
+  }
+  .cover-right::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(60deg, rgba(255,69,69,0.05) 1px, transparent 1px),
+      linear-gradient(-60deg, rgba(255,69,69,0.05) 1px, transparent 1px);
+    background-size: 80px 138px;
+    opacity: 0.5;
+  }
+  .cover-right::after {
+    /* coral corner accent */
+    content: "";
+    position: absolute;
+    top: 24px; right: 24px;
+    width: 80px; height: 80px;
+    border-top: 3px solid var(--ea-primary);
+    border-right: 3px solid var(--ea-primary);
+  }
+  .cover-art-mark {
+    position: relative;
+    z-index: 2;
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    color: rgba(255,69,69,0.92);
+    font-size: 240px;
+    line-height: 0.85;
+    letter-spacing: -8px;
+    text-shadow: 0 0 80px rgba(255,69,69,0.4);
+  }
+  .cover-art-sub {
+    position: absolute;
+    top: 48px; left: 48px;
+    z-index: 2;
+    font-family: var(--ea-font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.55);
+    font-size: 14px;
+  }
+  .cover-art-ticker {
+    position: absolute;
+    bottom: 48px; right: 48px;
+    z-index: 2;
+    font-family: var(--ea-font-text);
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    text-align: right;
+    letter-spacing: 1px;
+    line-height: 1.7;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 32px;
+    margin-top: 48px;
+  }
+  .meta-item .meta-label {
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 12px;
+  }
+  .meta-item .meta-value {
+    font-family: var(--ea-font-display);
+    font-weight: 700;
+    font-size: 22px;
+    color: #fff;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+  }
+
+  /* ---------- Generic two-column ---------- */
+  .col-2 {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+  }
+  .col-2.tight { gap: 80px; }
+  .stack-md > * + * { margin-top: 36px; }
+  .stack-lg > * + * { margin-top: 56px; }
+
+  /* ---------- Big quote / question ---------- */
+  .big-question {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .big-question .q-eyebrow {
+    color: var(--ea-primary);
+    margin-bottom: 32px;
+  }
+  .big-question .q-mark {
+    color: var(--ea-primary);
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    font-size: 200px;
+    line-height: 1;
+    margin-left: -10px;
+  }
+
+  /* ---------- Flow diagram ---------- */
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    margin-top: 56px;
+  }
+  .flow-step {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 24px 22px;
+    position: relative;
+    min-height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .flow-step.highlight {
+    border-color: var(--ea-primary);
+    background: rgba(255,69,69,0.08);
+  }
+  .flow-step .step-num {
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    color: rgba(255,255,255,0.25);
+    font-size: 36px;
+    letter-spacing: -1px;
+  }
+  .flow-step.highlight .step-num { color: var(--ea-primary); }
+  .flow-step .step-label {
+    font-family: var(--ea-font-display);
+    font-weight: 700;
+    font-size: 19px;
+    color: #fff;
+    line-height: 1.25;
+    letter-spacing: -0.2px;
+  }
+  .flow-step .step-meta {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-top: 12px;
+  }
+
+  /* ---------- 2x2 matrix ---------- */
+  .matrix-wrap {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: 1fr 60px;
+    gap: 16px;
+    height: 640px;
+  }
+  .matrix-y-label, .matrix-x-label {
+    display: flex; align-items: center; justify-content: center;
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.5);
+  }
+  .matrix-y-label { writing-mode: vertical-rl; transform: rotate(180deg); }
+  .matrix {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+    background: rgba(0,0,0,0.15);
+    border: 1px solid rgba(0,0,0,0.15);
+  }
+  .quad {
+    background: #fafafa;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  .quad.primary {
+    background: var(--ea-primary);
+    color: #fff;
+  }
+  .quad.primary .quad-defn { color: rgba(255,255,255,0.92); }
+  .quad-axis-mark {
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.4);
+  }
+  .quad.primary .quad-axis-mark { color: rgba(255,255,255,0.65); }
+  .quad-name {
+    font-family: var(--ea-font-display);
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.3px;
+    margin: 16px 0 8px;
+  }
+  .quad-platform {
+    display: inline-block;
+    font: var(--ea-caption-sm);
+    letter-spacing: var(--ea-caption-sm-tracking);
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.08);
+    padding: 4px 10px;
+    border-radius: 9999px;
+    color: rgba(0,0,0,0.7);
+  }
+  .quad.primary .quad-platform {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+  .quad-defn {
+    font-size: 18px;
+    color: rgba(0,0,0,0.65);
+    line-height: 1.4;
+    font-weight: 400;
+  }
+  .quad-pin { display: none; }
+
+  /* ---------- Findings cards ---------- */
+  .findings {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    flex: 1;
+  }
+  .find-card {
+    background: var(--ea-surface-dark-card);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .find-card.primary { background: var(--ea-primary); }
+  .find-card.primary .find-section-label { color: rgba(255,255,255,0.85); }
+  .find-card.primary .find-section-body { color: rgba(255,255,255,0.95); }
+  .find-num {
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -1.5px;
+    color: var(--ea-primary);
+    margin-bottom: 16px;
+  }
+  .find-card.primary .find-num { color: #fff; opacity: 0.9; }
+  .find-headline {
+    font-family: var(--ea-font-display);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+    color: #fff;
+    margin: 0 0 20px;
+  }
+  .find-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.12); }
+  .find-card.primary .find-section { border-top-color: rgba(255,255,255,0.25); }
+  .find-section-label {
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 10px;
+  }
+  .find-section-body {
+    font-size: 16px;
+    color: rgba(255,255,255,0.82);
+    white-space: pre-line;
+    line-height: 1.4;
+  }
+
+  /* Bar comparison (relative-only, no numbers) */
+  .bar-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-row .bar-label {
+    width: 80px;
+    font: var(--ea-eyebrow);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+  }
+  .find-card.primary .bar-row .bar-label { color: rgba(255,255,255,0.8); }
+  .bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .find-card.primary .bar-track { background: rgba(255,255,255,0.2); }
+  .bar-fill {
+    height: 100%;
+    background: var(--ea-primary);
+    border-radius: 9999px;
+  }
+  .find-card.primary .bar-fill { background: #fff; }
+
+  /* ---------- Recommendations table ---------- */
+  .rec-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+  }
+  .rec-row {
+    display: grid;
+    grid-template-columns: 0.8fr 1.1fr 1fr 0.5fr;
+    gap: 32px;
+    padding: 32px 0;
+    border-top: 1px solid rgba(0,0,0,0.12);
+    align-items: start;
+  }
+  .rec-row.head {
+    border-top: none;
+    border-bottom: 2px solid #000;
+    padding: 0 0 16px;
+    align-items: end;
+  }
+  .rec-row.head > * {
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    text-transform: uppercase;
+    font-size: 13px;
+    color: rgba(0,0,0,0.6);
+  }
+  .rec-cell {
+    font-size: 22px;
+    line-height: 1.45;
+    color: rgba(0,0,0,0.85);
+  }
+  .rec-cell.title {
+    font-family: var(--ea-font-display);
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+    color: #000;
+  }
+  .rec-cell.arrow {
+    display: flex; align-items: center;
+    color: var(--ea-primary);
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    font-size: 32px;
+  }
+  .priority {
+    display: inline-block;
+    font: var(--ea-caption-sm);
+    letter-spacing: var(--ea-caption-sm-tracking);
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 14px;
+  }
+  .priority.high { background: var(--ea-primary); color: #fff; }
+  .priority.med { background: #1a1a1a; color: #fff; }
+
+  /* ---------- Impact cards ---------- */
+  .impact-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 56px;
+  }
+  .impact-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 32px;
+  }
+  .impact-card.coral { background: var(--ea-primary); border-color: var(--ea-primary); }
+  .impact-card .ic-num {
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    color: var(--ea-primary);
+    margin-bottom: 16px;
+  }
+  .impact-card.coral .ic-num { color: rgba(255,255,255,0.85); }
+  .impact-card .ic-title {
+    font-family: var(--ea-font-display);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+  }
+  .impact-card .ic-list {
+    list-style: none; padding: 0; margin: 0;
+    font-size: 18px; color: rgba(255,255,255,0.8); line-height: 1.7;
+  }
+  .impact-card.coral .ic-list { color: rgba(255,255,255,0.95); }
+  .impact-card .ic-list li::before { content: "—  "; color: rgba(255,255,255,0.4); }
+  .impact-card.coral .ic-list li::before { color: rgba(255,255,255,0.6); }
+
+  /* ---------- Closing line ---------- */
+  .closing-line {
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 64px;
+  }
+  .closing-line .lede {
+    font-family: var(--ea-font-display);
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    color: #fff;
+    flex: 1;
+  }
+  .closing-line .lede .accent { color: var(--ea-primary); }
+  .closing-line .disclaimer {
+    font-size: 16px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.5;
+    max-width: 420px;
+  }
+
+  /* ---------- Survey design page ---------- */
+  .survey-conditions {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .sc-row {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 20px;
+    align-items: baseline;
+  }
+  .sc-marker {
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    color: var(--ea-primary);
+    font-size: 22px;
+  }
+  .sc-text {
+    font-family: var(--ea-font-display);
+    font-weight: 600;
+    font-size: 24px;
+    color: #fff;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+  }
+
+  /* ---------- Context page diagram ---------- */
+  .data-merge {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 0;
+    align-items: stretch;
+    margin-top: 40px;
+  }
+  .data-source {
+    background: rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 32px;
+  }
+  .data-source.dark {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #fff;
+  }
+  .ds-label {
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    text-transform: uppercase;
+    color: var(--ea-primary);
+    margin-bottom: 16px;
+  }
+  .ds-title {
+    font-family: var(--ea-font-display);
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    letter-spacing: -0.3px;
+  }
+  .ds-list {
+    list-style: none; padding: 0; margin: 0;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+  .data-source .ds-list { color: rgba(0,0,0,0.7); }
+  .data-source.dark .ds-list { color: rgba(255,255,255,0.75); }
+  .ds-list li::before { content: "·  "; opacity: 0.4; }
+  .merge-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .merge-arrow .plus {
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    color: var(--ea-primary);
+    font-size: 56px;
+    line-height: 1;
+  }
+  .merge-out {
+    margin-top: 24px;
+    background: var(--ea-primary);
+    color: #fff;
+    padding: 28px 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .merge-out .mo-label {
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    color: rgba(255,255,255,0.85);
+  }
+  .merge-out .mo-title {
+    font-family: var(--ea-font-display);
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: -0.4px;
+  }
+
+  /* ---------- Slide footer page number ---------- */
+  .pageno {
+    position: absolute;
+    bottom: 40px;
+    right: 100px;
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+  .light .pageno, .hex .pageno { color: rgba(0,0,0,0.4); }
+  .coral .pageno { color: rgba(255,255,255,0.7); }
+
+  /* hide deck-stage's built-in counter, we have our own pageno */
+  deck-stage::part(counter) { display: none; }
+
+  /* ---------- Section opener (problem slide) ---------- */
+  .opener {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .opener-q {
+    font-family: var(--ea-font-display);
+    font-weight: 900;
+    font-size: 96px;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    color: #fff;
+  }
+  .opener-q .accent { color: var(--ea-primary); }
+  .opener-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .of-step {
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid var(--ea-primary);
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .of-step.solid {
+    background: var(--ea-primary);
+    border-left-color: #fff;
+  }
+  .of-step .of-label {
+    font: var(--ea-eyebrow);
+    letter-spacing: var(--ea-eyebrow-tracking);
+    color: rgba(255,255,255,0.55);
+  }
+  .of-step.solid .of-label { color: rgba(255,255,255,0.85); }
+  .of-step .of-text {
+    font-family: var(--ea-font-display);
+    font-weight: 700;
+    font-size: 26px;
+    color: #fff;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+  }
+
+</style>
+</head>
+<body>
+
+<script src="deck-stage.js"></script>
+
+<deck-stage width="1920" height="1080">
+
+  <!-- ============ SLIDE 1: COVER ============ -->
+  <section data-label="01 표지">
+    <div class="chrome">
+      <div class="ea-mark">
+        <span style="display:inline-block;width:32px;height:32px;background:var(--ea-primary);border-radius:2px;position:relative;">
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-style:italic;font-weight:900;font-size:18px;letter-spacing:-1px;"></span>
+        </span>
+        포트폴리오 · 게임 사업 PM
+      </div>
+      <div class="meta">
+        <span>2025.01 — 2025.03</span>
+        <span>Case 01 / 01</span>
+      </div>
+    </div>
+
+    <div class="cover-grid">
+      <div class="cover-left">
+        <div>
+          <div class="eyebrow accent" style="margin-bottom: 32px;">Steam Next Fest CBT · 케이스 스터디</div>
+          <h1 class="display-xxl">Darkest
+Days</h1>
+          <div class="cover-tag" style="margin-top: 36px;">CBT 설문 분석 &amp; 코호트 설계 — 유저 피드백 및 인게임 데이터를 통한 런칭 전 의사결정 우선 순위 판단</div>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-item">
+            <div class="meta-label">Project</div>
+            <div class="meta-value">CBT 설문<br>&amp; 코호트 분석</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Role</div>
+            <div class="meta-value">게임 사업 PM<br>설문 · 분석</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Platform</div>
+            <div class="meta-value">Steam<br>PC · 모바일 크로스</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Genre</div>
+            <div class="meta-value">좀비<br>루트슈터</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cover-right">
+        <div class="cover-art-sub">CBT · Steam Next Fest · Build 0.9.x</div>
+        <div class="cover-art-mark">DD</div>
+        <div class="cover-art-ticker">
+          [설문 응답]<br>
+          [플레이 데이터]<br>
+          [코호트 매트릭스]
+        </div>
+      </div>
+    </div>
+
+    <div class="pageno">01 / 08</div>
+  </section>
+
+  <!-- ============ SLIDE 2: PROBLEM ============ -->
+  <section data-label="02 문제 정의">
+    <div class="chrome">
+      <div class="ea-mark">
+        <span style="display:inline-block;width:32px;height:32px;background:var(--ea-primary);border-radius:2px;position:relative;">
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-style:italic;font-weight:900;font-size:18px;letter-spacing:-1px;"></span>
+        </span>
+        Darkest Days · CBT Survey Analysis
+      </div>
+      <div class="meta"><span class="accent">02 · 문제 정의</span></div>
+    </div>
+
+    <div style="margin-bottom: 56px;">
+      <div class="eyebrow accent" style="margin-bottom: 24px;">Problem · 문제 정의</div>
+      <h2 class="title">런칭 직전 효율적인 리소스 활용을<br>위한 합리적 근거</h2>
+    </div>
+
+    <div class="opener">
+      <div>
+        <div class="body" style="margin-bottom: 32px; max-width: 720px;">런칭 직전 제한된 리소스 중 우선적으로 개선이 필요한 부분에 대한 내부적 평가를 넘어 합리적인 외부 평가 기반 근거 필요</div>
+        <div class="body" style="max-width: 720px;">특히, 콘텐츠 개선 및 우선 순위(만족도) 결정의 경우 정성적 인게임 데이터만으로는 판단이 어렵다고 생각되어 설문 조사를 통한 정량적 데이터 확보 및 판단 근거 형성</div>
+      </div>
+
+      <div class="opener-flow">
+        <div class="of-step">
+          <div class="of-label" style="font-size: 14px">Problem</div>
+          <div class="of-text">제한된 개발 리소스, 다수의 개선 후보</div>
+        </div>
+        <div class="of-step">
+          <div class="of-label" style="font-size: 14px"></div>
+          <div class="of-text">의견이 아닌 데이터 기반의 우선순위 근거</div>
+        </div>
+        <div class="of-step solid">
+          <div class="of-label">Goal</div>
+          <div class="of-text">런칭 전 집중 영역 + 핵심 타겟 코호트 정의</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pageno">02 / 08</div>
+  </section>
+
+  <!-- ============ SLIDE 3: CONTEXT ============ -->
+  <section class="light" data-label="03 프로젝트 배경">
+    <div class="chrome">
+      <div class="ea-mark">
+        <span style="display:inline-block;width:32px;height:32px;background:var(--ea-primary);border-radius:2px;position:relative;">
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-style:italic;font-weight:900;font-size:18px;letter-spacing:-1px;"></span>
+        </span>
+        Darkest Days · CBT Survey Analysis
+      </div>
+      <div class="meta"><span style="color:var(--ea-primary);">03 · 프로젝트 배경</span></div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <div class="eyebrow" style="color:var(--ea-primary); margin-bottom: 24px;">Context · 프로젝트 배경</div>
+      <h2 class="title" style="color:#000;">Steam Next Fest CBT를
+활용한 글로벌 유저 반응 검증</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; flex: 1; align-items: start; margin-top: 16px;">
+      <div>
+        <div class="body" style="color: rgba(0,0,0,0.72); font-size: 22px; padding: 40px 0px 0px"></div>
+        <div class="body" style="color: rgba(0,0,0,0.72); font-size: 22px; margin-top: 24px;">런칭 전 CBT를 통해 경쟁작 대비 강점, 핵심 이용자 층, 우선 개선 항목 등에 대한 합리적인 논거 확보 필요.</div>
+        <div class="body" style="color: rgba(0,0,0,0.72); font-size: 22px; margin-top: 24px;">Steam Next Fest를 중심으로 진행된 CBT 특성 상 다수의 서구권 유저 유입을 예측하여 영어를 중심으로 영, 한, 중, 일 총 4가지 언어를 지원한 설문 설계.</div>
+      </div>
+
+      <div>
+        <div class="data-merge">
+          <div class="data-source">
+            <div class="ds-label" style="font-size: 14px">Source A</div>
+            <div class="ds-title" style="color:#000;">설문 데이터</div>
+            <ul class="ds-list">
+              <li>장르 적합성</li>
+              <li>요소별 만족도</li>
+              <li>플레이 의향</li>
+              <li>개선 희망 영역</li>
+            </ul>
+          </div>
+          <div class="merge-arrow">
+            <div class="plus">+</div>
+          </div>
+          <div class="data-source dark">
+            <div class="ds-label" style="color: #FF7575; font-size: 14px"></div>
+            <div class="ds-title">인게임 데이터</div>
+            <ul class="ds-list">
+              <li>레벨 &amp; 진행도</li>
+              <li>멀티플레이 진입 &amp; 깊이</li>
+              <li>콘텐츠별 도달 수준</li>
+              <li>세션 구조</li>
+            </ul>
+          </div>
+        </div>
+        <div class="merge-out">
+          <div class="mo-label" style="font-size: 14px">
+</div>
+          <div class="mo-title">코호트 분석 →</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pageno" style="color:rgba(0,0,0,0.4);">03 / 08</div>
+  </section>
+
+  <!-- ============ SLIDE 4: SURVEY DESIGN ============ -->
+  <section data-label="04 설문 설계">
+    <div class="chrome">
+      <div class="ea-mark">
+        <span style="display:inline-block;width:32px;height:32px;background:var(--ea-primary);border-radius:2px;position:relative;">
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-style:italic;font-weight:900;font-size:18px;letter-spacing:-1px;"></span>
+        </span>
+        Darkest Days · CBT Survey Analysis
+      </div>
+      <div class="meta"><span class="accent">04 · 설문 설계</span></div>
+    </div>
+
+    <div style="margin-bottom: 32px;">
+      <div class="eyebrow accent" style="margin-bottom: 24px;">Survey Design · 설문 설계</div>
+      <h2 class="title">게임 유입 코호트 설정을
+위한 응답 구조 설계</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 0.85fr 1fr; gap: 80px; align-items: start;">
+      <div class="survey-conditions" style="padding: 40px 0px 0px">
+        <div class="eyebrow" style="color: rgba(255,255,255,0.5); margin-bottom: 8px;">설문 설계 조건</div>
+        <div class="sc-row"><div class="sc-marker">01</div><div class="sc-text">5분 이내 응답 가능한 분량</div></div>
+        <div class="sc-row"><div class="sc-marker">02</div><div class="sc-text">장르 적합도 + 요소별 만족도 측정</div></div>
+        <div class="sc-row"><div class="sc-marker">03</div><div class="sc-text">스크리닝 질문으로 응답 신뢰도 확보</div></div>
+        <div class="sc-row"><div class="sc-marker">04</div><div class="sc-text">내부 플레이 데이터와 결합</div></div>
+        <div class="sc-row"><div class="sc-marker">05</div><div class="sc-text">코호트별 비교 분석이 가능한 구조</div></div>
+      </div>
+
+      <div style="padding: 40px 0px 0px">
+        <div class="eyebrow" style="color: rgba(255,255,255,0.5); margin-bottom: 8px; font-size: 16px">설문 Flow</div>
+
+        <div class="flow" style="grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px;">
+          <div class="flow-step">
+            <div>
+              <div class="step-num">01</div>
+              <div class="step-meta">Step</div>
+            </div>
+            <div class="step-label">좀비 &amp; 슈터 장르 친화도 확인</div>
+          </div>
+          <div class="flow-step">
+            <div>
+              <div class="step-num">02</div>
+              <div class="step-meta">Step</div>
+            </div>
+            <div class="step-label">경쟁작 &amp; 유사 장르 플레이 경험</div>
+          </div>
+          <div class="flow-step">
+            <div>
+              <div class="step-num">03</div>
+              <div class="step-meta">Step</div>
+            </div>
+            <div class="step-label">요소별 4점 척도 만족도 평가</div>
+          </div>
+          <div class="flow-step highlight">
+            <div>
+              <div class="step-num">04</div>
+              <div class="step-meta">Screening</div>
+            </div>
+            <div class="step-label">응답 품질 검증 스크리닝 질문</div>
+          </div>
+          <div class="flow-step">
+            <div>
+              <div class="step-num">05</div>
+              <div class="step-meta">Step</div>
+            </div>
+            <div class="step-label">플레이 의향 &amp; 개선 희망 요소      </div>
+          </div>
+          <div class="flow-step">
+            <div>
+              <div class="step-num">06</div>
+              <div class="step-meta">STEP</div>
+            </div>
+            <div class="step-label">주관식 답변</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pageno">04 / 08</div>
+  </section>
+
+  <!-- ============ SLIDE 5: COHORT DESIGN ============ -->
+  <section class="hex" data-label="05 코호트 설계">
+    <div class="chrome">
+      <div class="ea-mark">
+        <span style="display:inline-block;width:32px;height:32px;background:var(--ea-primary);border-radius:2px;position:relative;">
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-style:italic;font-weight:900;font-size:18px;letter-spacing:-1px;"></span>
+        </span>
+        Darkest Days · CBT Survey Analysis
+      </div>
+      <div class="meta"><span style="color:var(--ea-primary);">05 · 코호트 설계</span></div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <div class="eyebrow" style="color:var(--ea-primary); margin-bottom: 24px;">Cohort Design · 코호트 설계</div>
+      <h2 class="title" style="color:#000;">설문 × 인게임 데이터를
+통한 타겟 유저 정의</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 64px; flex: 1; align-items: stretch;">
+      <div>
+        <div class="matrix-wrap" style="padding: 40px 0px 0px">
+          <div class="matrix-y-label">슈팅 친화도 →</div>
+          <div class="matrix">
+            <!-- Top-left: Non-zombie + High-shooter -->
+            <div class="quad">
+              <div>
+                <div class="quad-axis-mark">좀비 낮음 · 슈팅 높음</div>
+                <div class="quad-name">슈터 로열</div>
+                <div class="quad-defn">슈팅 경험은 풍부하나 좀비 선호 낮음. 서브 타겟군_2
+</div>
+              </div>
+              <div><span class="quad-platform">모바일 비중</span></div>
+              <div class="quad-pin"></div>
+            </div>
+            <!-- Top-right: Zombie-lover + High-shooter (CORE) -->
+            <div class="quad primary">
+              <div>
+                <div class="quad-axis-mark">좀비 높음 · 슈팅 높음</div>
+                <div class="quad-name">핵심 타겟<br>좀비 + 슈팅 · PC</div>
+                <div class="quad-defn">플레이 의향 가장 높음. 런칭 시 핵심 타겟군</div>
+              </div>
+              <div><span class="quad-platform">PC 비중</span></div>
+              <div class="quad-pin"></div>
+            </div>
+            <!-- Bottom-left: Low / Low (out of scope cell) -->
+            <div class="quad">
+              <div>
+                <div class="quad-axis-mark">좀비 낮음 · 슈팅 낮음</div>
+                <div class="quad-name" style="color: rgba(0,0,0,0.45);">프로필 외</div>
+                <div class="quad-defn">베이스라인 비교용. 런칭 타겟에는 미포함</div>
+              </div>
+              <div><span class="quad-platform">혼합</span></div>
+            </div>
+            <!-- Bottom-right: Zombie + Low-shooter (light/casual) -->
+            <div class="quad">
+              <div>
+                <div class="quad-axis-mark">좀비 높음 · 슈팅 낮음</div>
+                <div class="quad-name">라이트 좀비 팬</div>
+                <div class="quad-defn">'좀비 컨셉에 반응하는 라이트 유저군. 서브 타겟군'</div>
+              </div>
+              <div><span class="quad-platform">PC 비중</span></div>
+              <div class="quad-pin"></div>
+            </div>
+          </div>
+          <div></div>
+          <div class="matrix-x-label">좀비 친화도 →</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 20px; padding: 40px 0px 0px">
+        <div class="eyebrow" style="color: rgba(0,0,0,0.5); margin-bottom: 4px;">설계 의도</div>
+        <div style="background:#fff; padding: 28px; border-radius: 4px;">
+          <div style="font-family: var(--ea-font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.2px; margin-bottom: 8px;">데이터를 통한 실제 만족도 일치 여부 확인</div>
+          <div style="font-size: 17px; line-height: 1.5; color: rgba(0,0,0,0.7);">실제 인게임 데이터를 통해 콘텐츠 체험 여부 및 레벨 달성 수준을 통한 설문 신뢰도
+확보 및 핵심 개선 포인트의 유의미성 검증</div>
+        </div>
+        <div style="background:#fff; padding: 28px; border-radius: 4px;">
+          <div style="font-family: var(--ea-font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.2px; margin-bottom: 8px;">3가지 기준의 유저 분류</div>
+          <div style="font-size: 17px; line-height: 1.5; color: rgba(0,0,0,0.7);">좀비, 슈팅, 플랫폼 3가지 축을 기준으로 유입 유저 층을 정의</div>
+        </div>
+        <div style="background:#000; color:#fff; padding: 28px; border-radius: 4px;">
+          <div style="font: var(--ea-eyebrow); letter-spacing: var(--ea-eyebrow-tracking); text-transform: uppercase; color: var(--ea-primary); margin-bottom: 8px;">기준 셀</div>
+          <div style="font-family: var(--ea-font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.2px;">‘좀비 · 슈팅 · PC’ 코호트가 핵심 타겟군</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pageno" style="color:rgba(0,0,0,0.4);">05 / 08</div>
+  </section>
+
+  <!-- ============ SLIDE 6: FINDINGS ============ -->
+  <section data-label="06 분석 결과">
+    <div class="chrome">
+      <div class="ea-mark">
+        <span style="display:inline-block;width:32px;height:32px;background:var(--ea-primary);border-radius:2px;position:relative;">
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-style:italic;font-weight:900;font-size:18px;letter-spacing:-1px;"></span>
+        </span>
+        Darkest Days · CBT Survey Analysis
+      </div>
+      <div class="meta"><span class="accent">06 · 분석 결과</span></div>
+    </div>
+
+    <div style="margin-bottom: 32px;">
+      <div class="eyebrow accent" style="margin-bottom: 24px;">Findings · 분석 결과</div>
+      <h2 class="title">핵심 타겟 및 개선 항목 인사이트 도출
+</h2>
+    </div>
+
+    <div class="findings">
+      <div class="find-card primary">
+        <div class="find-num">01</div>
+        <div class="find-headline">핵심 타겟은 ‘좀비 + 슈팅 + PC’ 유저층</div>
+
+        <div class="find-section">
+          <div class="find-section-label">Insight</div>
+          <div class="find-section-body" style="padding: 11px">유의미한 이용자 비중 유지 및 높은 플레이 의향을 지닌 핵심 코호트</div>
+        </div>
+
+        <div class="find-section">
+          <div class="find-section-label">Evidence — 지속 의향 (상대 비교)</div>
+          <div class="bar-stack" style="margin: 35px 0px 0px">
+            <div class="bar-row"><span class="bar-label">Core</span><div class="bar-track"><div class="bar-fill" style="width: 92%;"></div></div></div>
+            <div class="bar-row"><span class="bar-label">Light Z</span><div class="bar-track"><div class="bar-fill" style="width: 58%;"></div></div></div>
+            <div class="bar-row"><span class="bar-label">Loyal S</span><div class="bar-track"><div class="bar-fill" style="width: 44%;"></div></div></div>
+          </div>
+        </div>
+
+        <div class="find-section">
+          <div class="find-section-label">PM Implication</div>
+          <div class="find-section-body">Steam 런칭 메시지를 좀비 생존 · 슈팅 · PC 중심으로 포지셔닝</div>
+        </div>
+      </div>
+
+      <div class="find-card">
+        <div class="find-num">02</div>
+        <div class="find-headline">시각적 퀄리티와 오픈월드 깊이가 핵심 평가 요소</div>
+
+        <div class="find-section">
+          <div class="find-section-label">Insight</div>
+          <div class="find-section-body">전투 시 시각 퀄리티가 최우선 개선 항목으로 지적, 오픈월드 탐험 강조를 희망한 응답의 높은 비중</div>
+        </div>
+
+        <div class="find-section">
+          <div class="find-section-label">Evidence — 개선 희망 영역 (상대 비교)</div>
+          <div class="bar-stack">
+            <div class="bar-row"><span class="bar-label">시각</span><div class="bar-track"><div class="bar-fill" style="width: 88%;"></div></div></div>
+            <div class="bar-row"><span class="bar-label">오픈W</span><div class="bar-track"><div class="bar-fill" style="width: 74%;"></div></div></div>
+            <div class="bar-row"><span class="bar-label">루트</span><div class="bar-track"><div class="bar-fill" style="width: 46%;"></div></div></div>
+            <div class="bar-row"><span class="bar-label">성장</span><div class="bar-track"><div class="bar-fill" style="width: 32%;"></div></div></div>
+          </div>
+        </div>
+
+        <div class="find-section">
+          <div class="find-section-label">PM Implication</div>
+          <div class="find-section-body">런칭 전 우선순위는 VFX · 에셋 폴리싱 · 오픈월드 퀘스트 밀도에 집중</div>
+        </div>
+      </div>
+
+      <div class="find-card">
+        <div class="find-num">03</div>
+        <div class="find-headline">멀티플레이의 핵심 재미로의 발전 가능성</div>
+
+        <div class="find-section">
+          <div class="find-section-label">Insight</div>
+          <div class="find-section-body">높은 플레이 의향을 보인 유저의 상당 수가 멀티플레이 진행 및 높은
+만족도를 보였으나, 설문 &amp; 인게임 대다수 테스터는 체험 자체 X</div>
+        </div>
+
+        <div class="find-section">
+          <div class="find-section-label">Evidence — 멀티플레이 도달률 (상대 비교)</div>
+          <div class="bar-stack" style="margin: 64px 0px 0px">
+            <div class="bar-row"><span class="bar-label">도달</span><div class="bar-track"><div class="bar-fill" style="width: 35%;"></div></div></div>
+            <div class="bar-row"><span class="bar-label">미도달</span><div class="bar-track"><div class="bar-fill" style="width: 65%; background: rgba(255,255,255,0.35);"></div></div></div>
+          </div>
+        </div>
+
+        <div class="find-section">
+          <div class="find-section-label">PM Implication</div>
+          <div class="find-section-body">멀티 모드의 게임 핵심 재미로의 발전 가능성</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pageno">06 / 08</div>
+  </section>
+
+  <!-- ============ SLIDE 7: RECOMMENDATIONS ============ -->
+  <section class="light" data-label="07 개선 제안">
+    <div class="chrome">
+      <div class="ea-mark">
+        <span style="display:inline-block;width:32px;height:32px;background:var(--ea-primary);border-radius:2px;position:relative;">
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-style:italic;font-weight:900;font-size:18px;letter-spacing:-1px;"></span>
+        </span>
+        Darkest Days · CBT Survey Analysis
+      </div>
+      <div class="meta"><span style="color:var(--ea-primary);">07 · 개선 제안</span></div>
+    </div>
+
+    <div style="margin-bottom: 16px;">
+      <div class="eyebrow" style="color:var(--ea-primary); margin-bottom: 24px;">Recommendations · 개선 제안</div>
+      <h2 class="title" style="color:#000;">분석 결과의 액션 아이템</h2>
+    </div>
+
+    <div class="rec-table">
+      <div class="rec-row head">
+        <div>분석 결과</div>
+        <div>PM 제안</div>
+        <div>기대 효과</div>
+        <div style="text-align:right;">우선순위</div>
+      </div>
+
+      <div class="rec-row">
+        <div class="rec-cell title">핵심 유저군의 비주얼 퀄리티 &amp; 오픈월드 요소 중시</div>
+        <div class="rec-cell">인트로 · 튜토리얼 에셋 모델링 폴리싱 +
+맵 전반 퀘스트 · 탐험 요소 확장</div>
+        <div class="rec-cell">첫 인상 개선; 필드 탐험 몰입도 강화</div>
+        <div style="text-align:right;"><span class="priority high">High</span></div>
+      </div>
+
+      <div class="rec-row" style="padding: 52px 0px 32px">
+        <div class="rec-cell title">높은 멀티 만족도 but 낮은 참여율</div>
+        <div class="rec-cell">멀티 해금 시점 단축 및 접근성 강화</div>
+        <div class="rec-cell">게임 전반 리텐션 개선</div>
+        <div style="text-align:right;"><span class="priority high">High</span></div>
+      </div>
+
+      <div class="rec-row" style="padding: 52px 0px 32px">
+        <div class="rec-cell title">좀비 · 슈팅 선호 유저의 높은 플레이 의향</div>
+        <div class="rec-cell">Steam 마케팅 소재에서 ‘좀비 생존 · 슈팅’을 전면 강조</div>
+        <div class="rec-cell">타겟 유저 유입 효율 개선</div>
+        <div style="text-align:right;"><span class="priority med">Med</span></div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 16px; margin-top: 32px; color: rgba(0,0,0,0.55); font-size: 18px;"></div>
+
+    <div class="pageno" style="color:rgba(0,0,0,0.4);">07 / 08</div>
+  </section>
+
+  <!-- ============ SLIDE 8: IMPACT & LEARNINGS ============ -->
+  <section data-label="08 임팩트 및 러닝">
+    <div class="chrome">
+      <div class="ea-mark">
+        <span style="display:inline-block;width:32px;height:32px;background:var(--ea-primary);border-radius:2px;position:relative;">
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-style:italic;font-weight:900;font-size:18px;letter-spacing:-1px;">
+</span>
+        </span>
+        Darkest Days · CBT Survey Analysis
+      </div>
+      <div class="meta"><span class="accent">08 · 임팩트 &amp; 러닝</span></div>
+    </div>
+
+    <div style="margin-bottom: 32px;">
+      <div class="eyebrow accent" style="margin-bottom: 24px;">Impact &amp; Learnings · 임팩트 &amp; 러닝</div>
+      <h2 class="title">설문 데이터를 통한 의사결정 근거 생성</h2>
+    </div>
+
+    <div class="impact-cards">
+      <div class="impact-card" style="margin: 40px 0px 0px">
+        <div class="ic-num">Outcome 01 — 핵심 이용자층</div>
+        <div class="ic-title">런칭 이용자층 정의.</div>
+        <ul class="ic-list">
+          <li>PC 비중 높은 유저</li>
+          <li>좀비 장르 선호 유저</li>
+          <li>슈팅 친화 유저</li>
+          <li>멀티플레이 친화 유저</li>
+        </ul>
+      </div>
+      <div class="impact-card coral" style="margin: 40px 0px 0px">
+        <div class="ic-num">Outcome 02 — 개선 우선순위</div>
+        <div class="ic-title">런칭 전 우선순위 확정.</div>
+        <ul class="ic-list">
+          <li>시각 · 콘텐츠 폴리싱</li>
+          <li>멀티플레이 해금 시점 단축</li>
+          <li style="opacity: 0">
+</li>
+        </ul>
+      </div>
+      <div class="impact-card" style="margin: 40px 0px 0px">
+        <div class="ic-num">Outcome 03 — PM 관점의 학습</div>
+        <div class="ic-title">PM 관점의 학습.</div>
+        <ul class="ic-list">
+          <li>구조적 설문 형성을 통한 코호트 형성</li>
+          <li>설문 × 인게임 데이터 결합을 통한 논리적 근거 마련</li>
+          <li>우선순위 판단을 위한 데이터 기반 분석</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="closing-line" style="padding: 80px 0px 0px">
+      <div class="lede">정량적 + 정성적 데이터의 결합으로<br>도출한 <span class="accent">실행 가능한 인사이트</span>.</div>
+      <div class="disclaimer">
+        내부 수치는 대외 공개가 어려워, 본 포트폴리오는 절대 수치가 아닌 분석 구조 · 의사결정 흐름 · 도출 방향 중심으로 재구성되었습니다.
+      </div>
+    </div>
+
+    <div class="pageno">08 / 08</div>
+  </section>
+
+</deck-stage>
+
+</body>
+</html>
