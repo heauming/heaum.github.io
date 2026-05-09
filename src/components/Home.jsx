@@ -1,5 +1,6 @@
 import { SKILLS, CERTS } from '../data';
 import { Roadmap } from './Roadmap';
+import profileImg from '../assets/my_image.jpg';
 
 export function Home({ onOpenCareer }) {
   return (
@@ -7,7 +8,11 @@ export function Home({ onOpenCareer }) {
       <div>
         <div className="card" style={{ padding: 16 }}>
           <div className="photo-slot">
-            <span className="corner">Photo · 추가 예정</span>
+            <img
+    src={profileImg}
+    alt="profile"
+    className="profile-image"
+      />
           </div>
         </div>
 
