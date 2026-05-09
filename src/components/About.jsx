@@ -30,7 +30,7 @@ export function About() {
           <div key={c.n} className="about-cell">
             <div className="cell-photo">
                 <img
-                  src={aboutImages[idx]}
+                  src={aboutImages[index]}
                   alt={c.keyword}
                   className="about-photo"
                 />
