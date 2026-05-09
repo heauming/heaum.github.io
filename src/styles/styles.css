@@ -70,27 +70,14 @@ body { min-height: 100vh; font-family: var(--font-text); }
 .photo-slot {
   aspect-ratio: 4/5;
   border-radius: var(--radii-lg);
-  background:
-    repeating-linear-gradient(45deg, transparent, transparent 12px, rgba(0,0,0,0.025) 12px, rgba(0,0,0,0.025) 13px),
-    var(--bg-parchment);
-  border: 1px dashed rgba(0,0,0,0.18);
-  display: grid; place-items: center;
-  color: var(--fg-disabled);
-  position: relative;
   overflow: hidden;
+  position: relative;
 }
-.photo-slot::after {
-  content: "Photo";
-  font: 600 14px/1 var(--font-text);
-  letter-spacing: -0.224px;
-  color: var(--fg-disabled);
-}
-.photo-slot .corner {
-  position: absolute; top: 12px; left: 12px;
-  font: 600 12px/1 var(--font-text);
-  letter-spacing: -0.12px;
-  color: var(--fg-disabled);
-  text-transform: uppercase;
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .intro-block { margin-top: 28px; }
