@@ -1,8 +1,8 @@
 import { ABOUT_CELLS } from '../data';
-import first from '../my_image/first.jpg';
-import second from '../my_image/second.jpg';
-import third from '../my_image/third.jpg';
-import fourth from '../my_image/fourth.jpg';
+import first from '../assets/first.jpg';
+import second from '../assets/second.jpg';
+import third from '../assets/third.jpg';
+import fourth from '../assets/fourth.jpg';
 
 export function About() {
   const sections = [
