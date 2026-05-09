@@ -3,13 +3,19 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--fg); }
 body { min-height: 100vh; font-family: var(--font-text); }
-
+:root {
+  --transition-fast:
+    transform 120ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
 /* ============ Top nav ============ */
 .top-nav {
   position: sticky; top: 0; z-index: 50;
   background: rgba(245, 245, 247, 0.78);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
   border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 .top-nav-inner {
@@ -39,9 +45,7 @@ body { min-height: 100vh; font-family: var(--font-text); }
 .nav-box:hover { background: var(--bg-parchment); }
 .nav-box:active { transform: scale(0.95); }
 .nav-box.is-active {
-  background: var(--fg);
-  color: #fff;
-  border-color: var(--fg);
+transition: var(--transition-fast);
 }
 
 /* ============ Page shell ============ */
@@ -211,16 +215,6 @@ body { min-height: 100vh; font-family: var(--font-text); }
   letter-spacing: -0.15px;
   color: var(--link);
   white-space: nowrap;
-}
-.roadmap-node::after {
-  content: "";
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--link);
-  opacity: 0.55;
 }
 .roadmap-node { position: absolute; }
 .roadmap-node.current::after { background: var(--colors-primary-on-dark); opacity: 0.9; }
@@ -878,7 +872,7 @@ body { min-height: 100vh; font-family: var(--font-text); }
   line-height: 1.4;
   word-break: keep-all;
 }
-
+/* sticky requires ancestor overflow: visible */
 .cs-block-visual {
   background: var(--bg-parchment);
   border-radius: var(--radii-md);
