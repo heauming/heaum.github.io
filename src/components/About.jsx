@@ -1,4 +1,8 @@
 import { ABOUT_CELLS } from '../data';
+import first from '../my_image/first.jpg';
+import second from '../my_image/second.jpg';
+import third from '../my_image/third.jpg';
+import fourth from '../my_image/fourth.jpg';
 
 export function About() {
   const sections = [
@@ -7,6 +11,7 @@ export function About() {
     { eyebrow: "WHAT I DO NOW", heading: "지금 하고 있는 일", body: "현재 NHN의 데이터 사업 PM으로서 게임 데이터와 관련된 업무 전반을 도맡고 있습니다. 런칭 전·후의 DB 스키마 설계, 정합성 검증, KPI 설정, 데이터 분석 등 기술과 사업의 가교 역할을 수행 중입니다. 최근에는 사내에 AI 툴을 전파하는 역할도 함께 맡고 있습니다." },
     { eyebrow: "WHAT I'M LOOKING FOR", heading: "목표", body: "보고와 데이터 정리처럼 자동화 가능한 영역은 AI에 위임하고, 게임의 본질인 경쟁력 확보와 시장 전략 수립 같은 크리에이티브 영역에 집중할 수 있는 환경에 관심이 큽니다. 언어의 장벽을 넘어 전 세계 유저가 함께 즐기는 게임의 일원이 되고 싶습니다." },
   ];
+  const aboutImages = [first, second, third, fourth];
 
   return (
     <div className="about-grid">
@@ -21,12 +26,17 @@ export function About() {
       </div>
 
       <div className="about-grid-cells">
-        {ABOUT_CELLS.map((c) => (
+        {ABOUT_CELLS.map((c, index) => (
           <div key={c.n} className="about-cell">
             <div className="cell-photo">
-              <span className="ph-num">{c.n}</span>
-              <span className="ph-label">Photo</span>
-            </div>
+                <img
+                  src={aboutImages[idx]}
+                  alt={c.keyword}
+                  className="about-photo"
+                />
+              
+                <span className="ph-num">{c.n}</span>
+              </div>
             <div className="cell-text">
               <div className="cell-keyword">{c.keyword}</div>
               <div className="cell-detail">{c.detail}</div>
