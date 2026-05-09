@@ -76,8 +76,18 @@ body { min-height: 100vh; font-family: var(--font-text); }
 .profile-image {
   width: 100%;
   height: 100%;
+
   object-fit: cover;
+
+  object-position: 42% 18%;
+
   display: block;
+
+  transition: transform 220ms ease;
+}
+
+.photo-slot:hover .profile-image {
+  transform: scale(1.02);
 }
 
 .intro-block { margin-top: 28px; }
